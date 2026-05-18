@@ -1,0 +1,98 @@
+# Nothing OS — strict mono starship prompt
+# Backup: ~/.rice-backup/latest/configs/starship.toml
+
+palette = "nothing"
+add_newline = false
+
+format = """
+[▪](fg:accent) $directory$git_branch$git_status$fill$java$dotnet$nodejs$docker_context$cmd_duration$time
+$character"""
+
+[palettes.nothing]
+bg      = "#000000"
+surface = "#0a0a0a"
+dim     = "#3a3a3a"
+muted   = "#6e6e6e"
+subtle  = "#a8a8a8"
+text    = "#ffffff"
+bright  = "#ffffff"
+accent  = "#ffffff"
+error   = "#d72631"
+
+[directory]
+style = "fg:bright bold"
+format = "[$path]($style) "
+truncation_length = 3
+truncation_symbol = "…/"
+home_symbol = "~"
+read_only = " ◌"
+read_only_style = "fg:muted"
+
+[git_branch]
+symbol = "· "
+style = "fg:subtle"
+format = "[$symbol$branch]($style) "
+
+[git_status]
+style = "fg:muted"
+format = "[\\[$all_status$ahead_behind\\]]($style) "
+ahead = "↑$count"
+behind = "↓$count"
+modified = "~"
+untracked = "?"
+staged = "+"
+deleted = "-"
+renamed = "»"
+stashed = "≡"
+conflicted = "!"
+
+[fill]
+symbol = " "
+
+[time]
+disabled = false
+time_format = "%H:%M"
+style = "fg:muted"
+format = "[$time]($style)"
+
+[cmd_duration]
+min_time = 2_000
+style = "fg:muted"
+format = "[took $duration]($style) "
+
+[java]
+symbol = "· "
+style = "fg:muted"
+format = "[$symbol$version]($style) "
+
+[dotnet]
+symbol = "· "
+style = "fg:muted"
+format = "[$symbol$version]($style) "
+
+[nodejs]
+symbol = "· "
+style = "fg:muted"
+format = "[$symbol$version]($style) "
+
+[docker_context]
+symbol = "· "
+style = "fg:muted"
+format = "[$symbol$context]($style) "
+
+[character]
+success_symbol = "[▸](fg:bright bold)"
+error_symbol   = "[▸](fg:error bold)"
+vimcmd_symbol  = "[◂](fg:bright bold)"
+
+[os]
+disabled = true
+
+[username]
+disabled = true
+
+[hostname]
+disabled = true
+
+[package]
+disabled = true

@@ -1,0 +1,135 @@
+#!/usr/bin/env bash
+# gen-nothing-wallpapers — generate Nothing-OS-style mono wallpapers.
+# Re-runnable, deterministic. Requires ImageMagick 7.
+#
+# Output dir: ~/Pictures/Wallpapers/nothing-generated/
+# Resolution: 1920x1080 (override via WALL_W / WALL_H env vars)
+
+set -eu
+W=${WALL_W:-1920}
+H=${WALL_H:-1080}
+OUT="$HOME/Pictures/Wallpapers/nothing-generated"
+mkdir -p "$OUT"
+
+BG="#000000"
+FG="#ffffff"
+DIM="#1a1a1a"
+
+echo "Generating ${W}x${H} wallpapers into $OUT ..."
+
+# 1. dotmatrix — uniform grid of small white dots on black
+# Build pattern with the 'pattern:' / draw approach.
+magick -size "${W}x${H}" "xc:$BG" \
+  -fill "$FG" \
+  -draw "$(awk -v w=$W -v h=$H -v step=24 -v r=1.5 '
+    BEGIN {
+      for (y = step/2; y < h; y += step)
+        for (x = step/2; x < w; x += step)
+          printf "circle %d,%d %d,%d ", x, y, x+r, y;
+    }')" \
+  "$OUT/dotmatrix-${W}x${H}.png"
+echo "  ✓ dotmatrix-${W}x${H}.png"
+
+# 2. grid — thin grey lines on black, large cells
+magick -size "${W}x${H}" "xc:$BG" \
+  -stroke "$DIM" -strokewidth 1 -fill none \
+  -draw "$(awk -v w=$W -v h=$H -v step=80 '
+    BEGIN {
+      for (x = 0; x <= w; x += step) printf "line %d,0 %d,%d ", x, x, h;
+      for (y = 0; y <= h; y += step) printf "line 0,%d %d,%d ", y, w, y;
+    }')" \
+  "$OUT/grid-${W}x${H}.png"
+echo "  ✓ grid-${W}x${H}.png"
+
+# 3. glyph-N — giant Ndot N centered on black
+NDOT_FONT=$(fc-match -f '%{file}' 'Ndot 57' 2>/dev/null || echo "")
+if [ -n "$NDOT_FONT" ] && [ -f "$NDOT_FONT" ]; then
+  magick -size "${W}x${H}" "xc:$BG" \
+    -font "$NDOT_FONT" -fill "$FG" -gravity Center \
+    -pointsize $((H * 70 / 100)) -annotate +0+0 "N" \
+    "$OUT/glyph-N-${W}x${H}.png"
+  echo "  ✓ glyph-N-${W}x${H}.png  (font: $NDOT_FONT)"
+else
+  echo "  ! glyph-N skipped — Ndot 57 font not found via fc-match"
+fi
+
+# 4. minimal — black with single 1px white horizon line, 70% down
+magick -size "${W}x${H}" "xc:$BG" \
+  -stroke "$FG" -strokewidth 1 \
+  -draw "line 0,$((H * 70 / 100)) ${W},$((H * 70 / 100))" \
+  "$OUT/minimal-${W}x${H}.png"
+echo "  ✓ minimal-${W}x${H}.png"
+
+# 5. dotwave — dot grid with size modulation creating a wave
+magick -size "${W}x${H}" "xc:$BG" \
+  -fill "$FG" \
+  -draw "$(awk -v w=$W -v h=$H -v step=20 '
+    function abs(x) { return x < 0 ? -x : x }
+    BEGIN {
+      pi = 3.14159265;
+      for (y = step/2; y < h; y += step) {
+        for (x = step/2; x < w; x += step) {
+          # radius modulated by sin wave + distance from center
+          phase = (x / w) * 2 * pi * 3;
+          amp = (h/2 - y) / h;
+          r = 0.8 + 1.6 * (0.5 + 0.5 * sin(phase + amp * pi));
+          printf "circle %d,%d %d,%d ", x, y, x + r, y;
+        }
+      }
+    }')" \
+  "$OUT/dotwave-${W}x${H}.png"
+echo "  ✓ dotwave-${W}x${H}.png"
+
+# 6. dot-circle — large circular dot field, fading toward edges (Nothing glyph vibe)
+magick -size "${W}x${H}" "xc:$BG" \
+  -fill "$FG" \
+  -draw "$(awk -v w=$W -v h=$H -v step=22 '
+    function sqrt2(x) { return (x <= 0) ? 0 : exp(0.5 * log(x)) }
+    BEGIN {
+      cx = w/2; cy = h/2;
+      maxd = sqrt2(cx*cx + cy*cy);
+      for (y = step/2; y < h; y += step) {
+        for (x = step/2; x < w; x += step) {
+          d = sqrt2((x-cx)*(x-cx) + (y-cy)*(y-cy));
+          # only draw if within 40% of max distance
+          if (d < maxd * 0.40) {
+            r = 1.8 - 1.4 * (d / (maxd * 0.40));
+            if (r > 0.3) printf "circle %d,%d %d,%d ", x, y, x + r, y;
+          }
+        }
+      }
+    }')" \
+  "$OUT/dotcircle-${W}x${H}.png"
+echo "  ✓ dotcircle-${W}x${H}.png"
+
+# 7. dotmatrix-dense — tighter grid, built via 14×14 tile (avoids ARG_MAX)
+TILE=$(mktemp --suffix=.png)
+magick -size 14x14 "xc:$BG" -fill "$FG" -draw "point 7,7" "$TILE"
+magick -size "${W}x${H}" "tile:$TILE" "$OUT/dotmatrix-dense-${W}x${H}.png"
+rm -f "$TILE"
+echo "  ✓ dotmatrix-dense-${W}x${H}.png"
+
+# 8. corner-glyph — single Ndot "·" in bottom-right corner, deep minimalism
+if [ -n "${NDOT_FONT:-}" ] && [ -f "${NDOT_FONT:-}" ]; then
+  magick -size "${W}x${H}" "xc:$BG" \
+    -font "$NDOT_FONT" -fill "$FG" -gravity SouthEast \
+    -pointsize 96 -annotate +60+40 "nothing" \
+    "$OUT/corner-glyph-${W}x${H}.png"
+  echo "  ✓ corner-glyph-${W}x${H}.png"
+fi
+
+# 9. dotmatrix + diagonal line — minimal accent
+magick -size "${W}x${H}" "xc:$BG" \
+  -fill "$FG" \
+  -draw "$(awk -v w=$W -v h=$H -v step=28 -v r=1.5 '
+    BEGIN {
+      for (y = step/2; y < h; y += step)
+        for (x = step/2; x < w; x += step)
+          printf "circle %d,%d %d,%d ", x, y, x+r, y;
+    }')" \
+  -stroke "$FG" -strokewidth 1 -fill none \
+  -draw "line $((W/3)),0 $((W*2/3)),${H}" \
+  "$OUT/dot-line-${W}x${H}.png"
+echo "  ✓ dot-line-${W}x${H}.png"
+
+echo "Done. $(ls "$OUT" | wc -l) wallpapers in $OUT"

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="nothing-rice">
+  <schema id="org.gnome.shell.extensions.nothing-rice" path="/org/gnome/shell/extensions/nothing-rice/">
+
+    <key name="enable-css" type="b">
+      <default>true</default>
+      <summary>Inject Nothing CSS into shell</summary>
+      <description>Restyle notifications, popovers, and quick-settings to strict mono.</description>
+    </key>
+
+    <key name="enable-glyph-led" type="b">
+      <default>true</default>
+      <summary>Glyph LED flasher on notifications</summary>
+      <description>Spawn a row of pulsing dots along the bottom edge of the primary monitor when notifications arrive.</description>
+    </key>
+
+    <key name="enable-idle-overlay" type="b">
+      <default>true</default>
+      <summary>Idle Ndot overlay</summary>
+      <description>Show a centered pulsing Ndot animation when the session has been idle for N minutes.</description>
+    </key>
+
+    <key name="idle-timeout-ms" type="i">
+      <default>180000</default>
+      <range min="30000" max="3600000"/>
+      <summary>Idle timeout (ms)</summary>
+      <description>How long the session must be idle before the overlay appears.</description>
+    </key>
+
+    <key name="glyph-dot-count" type="i">
+      <default>33</default>
+      <range min="5" max="120"/>
+      <summary>Glyph LED dot count</summary>
+    </key>
+
+  </schema>
+</schemalist>

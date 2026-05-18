@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nothing.</title>
+<style>
+  :root {
+    --bg: #000;
+    --fg: #fff;
+    --dim: #a8a8a8;
+    --mute: #6e6e6e;
+    --faint: #4a4a4a;
+    --hi: #1a1a1a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: var(--bg); color: var(--fg);
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased; }
+
+  body {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 48px 64px;
+    position: relative;
+  }
+
+  /* dot-matrix bg */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    background-image:
+      radial-gradient(circle, #ffffff10 1px, transparent 1.4px);
+    background-size: 24px 24px;
+    background-position: 0 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  body > * { position: relative; z-index: 1; }
+
+  /* top bar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--mute);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+  }
+  .topbar .left { display: flex; gap: 24px; align-items: center; }
+  .topbar .dot {
+    width: 8px; height: 8px; background: var(--fg);
+    display: inline-block;
+  }
+  .topbar .label { text-transform: uppercase; }
+  #weather { color: var(--fg); }
+  #weather .t { color: var(--fg); }
+  #weather .c { color: var(--mute); margin-left: 8px; }
+
+  /* center: clock + search */
+  main {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 40px;
+  }
+  #clock {
+    font-family: "Ndot 57", "Ndot 55", "Inter", monospace;
+    font-size: clamp(80px, 18vw, 240px);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--fg);
+    text-align: center;
+    user-select: none;
+  }
+  #date {
+    font-family: "Inter", sans-serif;
+    color: var(--mute);
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: -16px;
+  }
+  form#search {
+    width: min(560px, 60vw);
+    border-bottom: 1px solid var(--hi);
+    display: flex; align-items: center;
+    padding: 12px 4px;
+    transition: border-color 0.15s ease;
+  }
+  form#search:focus-within { border-bottom-color: var(--fg); }
+  form#search input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--fg);
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.02em;
+  }
+  form#search input::placeholder { color: var(--faint); }
+  form#search .mark {
+    color: var(--mute);
+    font-family: "Ndot 57", monospace;
+    margin-right: 12px;
+    font-size: 18px;
+  }
+
+  /* bookmarks: 6 tile grid */
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .tile {
+    aspect-ratio: 1.2;
+    background: #0a0a0a;
+    border: 1px solid var(--hi);
+    color: var(--fg);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 14px 16px;
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: lowercase;
+    transition: background 0.1s ease, border-color 0.1s ease;
+    cursor: pointer;
+  }
+  .tile:hover {
+    background: #1a1a1a;
+    border-color: var(--fg);
+  }
+  .tile .marker { color: var(--mute); font-family: "Ndot 57", monospace; font-size: 16px; }
+  .tile .title  { color: var(--fg); font-weight: 500; word-break: break-word; }
+  .tile .domain { color: var(--mute); font-size: 10px; }
+  .tile.empty { color: var(--faint); cursor: pointer; align-items: center; justify-content: center; }
+  .tile.empty:hover .plus { color: var(--fg); }
+  .tile .plus { font-size: 24px; color: var(--faint); }
+
+  /* footer */
+  footer {
+    color: var(--mute);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 24px;
+  }
+
+  /* responsive */
+  @media (max-width: 900px) {
+    .tiles { grid-template-columns: repeat(3, 1fr); }
+    body { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="left">
+    <span class="dot"></span>
+    <span class="label">nothing.</span>
+  </div>
+  <div id="weather"><span class="t">—</span><span class="c"></span></div>
+</header>
+
+<main>
+  <div id="clock">00:00</div>
+  <div id="date">—</div>
+  <form id="search" onsubmit="return goSearch(event)">
+    <span class="mark">▸</span>
+    <input id="q" autofocus placeholder="search the web" autocomplete="off" spellcheck="false">
+  </form>
+  <div class="tiles" id="tiles"></div>
+</main>
+
+<footer>▪ steady-hedgehog · ndot ·</footer>
+
+<script>
+const tick = () => {
+  const d = new Date();
+  const pad = n => String(n).padStart(2, "0");
+  document.getElementById("clock").textContent = pad(d.getHours()) + ":" + pad(d.getMinutes());
+  document.getElementById("date").textContent =
+    d.toLocaleDateString(undefined, { weekday: "long", day: "2-digit", month: "short", year: "numeric" });
+};
+tick(); setInterval(tick, 1000 * 15);
+
+function goSearch(ev) {
+  ev.preventDefault();
+  const q = document.getElementById("q").value.trim();
+  if (!q) return false;
+  const url = /^https?:\/\//.test(q) ? q
+    : (q.includes(" ") || !q.includes(".")) ? "https://duckduckgo.com/?q=" + encodeURIComponent(q)
+    : "https://" + q;
+  location.href = url;
+  return false;
+}
+
+// --- bookmarks (localStorage) ---
+const DEFAULTS = [
+  { title: "github",      url: "https://github.com" },
+  { title: "claude",      url: "https://claude.ai" },
+  { title: "youtube",     url: "https://youtube.com" },
+  { title: "duckduckgo",  url: "https://duckduckgo.com" },
+  { title: "reddit",      url: "https://reddit.com" },
+  { title: "spotify",     url: "https://open.spotify.com" },
+];
+function loadTiles() {
+  let raw = localStorage.getItem("nothing.tiles");
+  let tiles;
+  try { tiles = raw ? JSON.parse(raw) : DEFAULTS.slice(); }
+  catch { tiles = DEFAULTS.slice(); }
+  while (tiles.length < 6) tiles.push(null);
+  return tiles.slice(0, 6);
+}
+function saveTiles(t) { localStorage.setItem("nothing.tiles", JSON.stringify(t)); }
+function domain(u) { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return ""; } }
+
+function renderTiles() {
+  const root = document.getElementById("tiles");
+  root.innerHTML = "";
+  const t = loadTiles();
+  t.forEach((b, i) => {
+    const el = document.createElement(b ? "a" : "div");
+    el.className = "tile" + (b ? "" : " empty");
+    if (b) {
+      el.href = b.url;
+      el.innerHTML = `<span class="marker">▪</span>
+                      <div><div class="title">${b.title}</div>
+                      <div class="domain">${domain(b.url)}</div></div>`;
+    } else {
+      el.innerHTML = `<span class="plus">+</span>`;
+    }
+    el.oncontextmenu = (ev) => {
+      ev.preventDefault();
+      const t2 = loadTiles();
+      const url = prompt(b ? "edit url (cancel to remove):" : "add bookmark url:", b ? b.url : "https://");
+      if (url === null && b) { t2[i] = null; saveTiles(t2); renderTiles(); return; }
+      if (!url) return;
+      const title = prompt("label:", b ? b.title : domain(url));
+      if (!title) return;
+      t2[i] = { title: title.toLowerCase(), url };
+      saveTiles(t2); renderTiles();
+    };
+    root.appendChild(el);
+  });
+}
+renderTiles();
+
+// --- weather (wttr.in) ---
+async function weather() {
+  try {
+    const r = await fetch("https://wttr.in/?format=j1");
+    if (!r.ok) return;
+    const j = await r.json();
+    const c = j.current_condition && j.current_condition[0];
+    if (!c) return;
+    document.querySelector("#weather .t").textContent = c.temp_C + "°";
+    document.querySelector("#weather .c").textContent = (c.weatherDesc[0].value || "").toLowerCase();
+  } catch (_) {}
+}
+weather();
+</script>
+</body>
+</html>

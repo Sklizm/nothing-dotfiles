@@ -1,0 +1,55 @@
+[credential "https://github.com"]
+	helper =
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !/usr/bin/gh auth git-credential
+
+[core]
+	pager = delta
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	dark = true
+	syntax-theme = Nothing
+	line-numbers = true
+	navigate = true
+	side-by-side = false
+	hunk-header-decoration-style = "#1a1a1a" ul
+	hunk-header-style = "#ffffff" bold
+	hunk-header-file-style = "#a8a8a8"
+	hunk-header-line-number-style = "#6e6e6e"
+	file-style = "#ffffff" bold
+	file-decoration-style = "#1a1a1a" ul
+	minus-style = "syntax #1a0000"
+	minus-emph-style = "syntax #3a0000"
+	plus-style = "syntax #0a0a0a"
+	plus-emph-style = "syntax #1a1a1a"
+	line-numbers-left-style = "#6e6e6e"
+	line-numbers-right-style = "#6e6e6e"
+	line-numbers-minus-style = "#d72631"
+	line-numbers-plus-style = "#a8a8a8"
+	line-numbers-zero-style = "#1a1a1a"
+	zero-style = "syntax"
+	blame-palette = "#000000 #0a0a0a #1a1a1a"
+
+[merge]
+	conflictstyle = zdiff3
+
+[diff]
+	colorMoved = default
+
+[color]
+	ui = auto
+
+[color "branch"]
+	current = white bold
+	local = white
+	remote = "#6e6e6e"
+
+[color "status"]
+	added = white
+	changed = "#a8a8a8"
+	untracked = "#6e6e6e"

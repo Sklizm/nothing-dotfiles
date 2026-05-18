@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# rice-log — append entries to the rice MANIFEST.txt
+# Usage:
+#   rice-log MODIFIED <abs-path> <relative-backup-path>
+#   rice-log CREATED  <abs-path>
+#   rice-log FLATPAK  <app-id>
+set -eu
+MAN="$HOME/.rice-backup/latest/MANIFEST.txt"
+action="$1"; shift
+case "$action" in
+  MODIFIED) printf 'MODIFIED\t%s\t%s\n' "$1" "$2" >> "$MAN" ;;
+  CREATED)  printf 'CREATED\t%s\t-\n'   "$1"      >> "$MAN" ;;
+  FLATPAK)  printf 'FLATPAK\t%s\t-\n'   "$1"      >> "$MAN" ;;
+  *) echo "rice-log: unknown action $action" >&2; exit 1 ;;
+esac

@@ -1,0 +1,164 @@
+/* Nothing OS — shell-side restyle (loaded by extension when enable-css = true) */
+
+/* Notifications */
+.notification-banner,
+.notification {
+  background-color: #0a0a0a !important;
+  color: #ffffff !important;
+  border: 1px solid #1a1a1a !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-family: "Inter", "Cantarell", sans-serif;
+}
+
+.notification-banner .notification-content,
+.notification .message-title {
+  color: #ffffff !important;
+}
+
+.notification-banner .notification-secondary-icon,
+.notification .message-source-name {
+  color: #6e6e6e !important;
+}
+
+/* Message tray date / clock */
+.message-list,
+.calendar,
+.datemenu-popover {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #1a1a1a !important;
+  border-radius: 0 !important;
+}
+
+.calendar .calendar-day,
+.calendar .calendar-day-base {
+  color: #ffffff !important;
+  background-color: transparent !important;
+  border-radius: 0 !important;
+}
+.calendar .calendar-today {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  font-weight: bold;
+}
+.calendar .calendar-other-month-day {
+  color: #4a4a4a !important;
+}
+
+/* Quick settings */
+.quick-settings,
+.quick-settings-menu {
+  background-color: #000000 !important;
+  border: 1px solid #1a1a1a !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.quick-toggle, .quick-menu-toggle {
+  background-color: #0a0a0a !important;
+  color: #6e6e6e !important;
+  border-radius: 0 !important;
+  border: 1px solid #1a1a1a !important;
+  transition-duration: 0ms !important;
+}
+.quick-toggle:hover, .quick-menu-toggle:hover {
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
+}
+.quick-toggle.checked, .quick-menu-toggle.checked {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-color: #ffffff !important;
+}
+.quick-toggle .QSTweakToggleLabel,
+.quick-toggle StLabel { font-weight: 500; }
+
+/* Slider mono */
+.slider {
+  color: #ffffff !important;
+  -slider-background-color: #1a1a1a;
+  -slider-active-background-color: #ffffff;
+  -slider-handle-radius: 0;
+}
+
+/* Popovers / menus */
+.popup-menu, .popup-menu-content, .popup-sub-menu {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #1a1a1a !important;
+  border-radius: 0 !important;
+}
+.popup-menu-item:hover, .popup-menu-item.selected {
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
+}
+
+/* OSD (volume / brightness) */
+.osd-window {
+  background-color: #000000 !important;
+  border: 1px solid #1a1a1a !important;
+  border-radius: 0 !important;
+  color: #ffffff !important;
+}
+.osd-window .level {
+  -barlevel-background-color: #1a1a1a;
+  -barlevel-active-background-color: #ffffff;
+  -barlevel-height: 4px;
+  -barlevel-border-radius: 0;
+}
+
+/* Search */
+.search-entry, .modal-dialog StEntry {
+  background-color: #0a0a0a !important;
+  color: #ffffff !important;
+  border: 1px solid #1a1a1a !important;
+  border-radius: 0 !important;
+}
+.search-entry:focus, .modal-dialog StEntry:focus {
+  border-color: #ffffff !important;
+}
+
+/* App grid / overview */
+.icon-grid .overview-icon,
+.icon-grid .overview-icon .overview-icon-title {
+  color: #ffffff !important;
+}
+
+/* Workspace switcher mono */
+.workspace-thumbnail {
+  background-color: #0a0a0a !important;
+  border: 1px solid #1a1a1a !important;
+  border-radius: 0 !important;
+}
+.workspace-thumbnail.active {
+  border-color: #ffffff !important;
+}
+
+/* Glyph LED container (also styled inline by JS) */
+.nothing-glyph-led {
+  background-color: transparent !important;
+}
+.nothing-glyph-dot {
+  background-color: #ffffff;
+  border-radius: 999px;
+  width: 6px; height: 6px;
+}
+
+/* Idle overlay */
+.nothing-idle-overlay {
+  background-color: rgba(0, 0, 0, 0.92);
+}
+.nothing-idle-glyph {
+  color: #ffffff;
+  font-family: "Ndot 57", "Inter", monospace;
+  font-size: 220pt;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+}
+.nothing-idle-time {
+  color: #6e6e6e;
+  font-family: "Inter", sans-serif;
+  font-size: 14pt;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}

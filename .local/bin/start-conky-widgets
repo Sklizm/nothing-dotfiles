@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Nothing OS rice — Conky widget launcher
+# Launches all four mono widgets. Re-runnable (kills existing first).
+
+set -u
+CONF_DIR="$HOME/.config/conky"
+WIDGETS=(clock-widget stats-widget nowplaying-widget)
+
+# Kill any existing conky instances we own
+pkill -u "$USER" -x conky 2>/dev/null || true
+sleep 0.4
+
+for w in "${WIDGETS[@]}"; do
+    cfg="$CONF_DIR/$w.conf"
+    if [[ -f "$cfg" ]]; then
+        conky -d -c "$cfg" >/dev/null 2>&1
+        echo "  started $w"
+    else
+        echo "  skip $w (config missing)"
+    fi
+done
+
+echo "conky widgets running:  $(pgrep -u "$USER" -c -x conky) processes"

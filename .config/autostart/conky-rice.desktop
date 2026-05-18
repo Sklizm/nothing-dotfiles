@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Nothing OS Conky Widgets
+Comment=Launches the 4 Nothing-themed Conky widgets on login
+Exec=sh -c 'sleep 3 && /home/codrin/.local/bin/start-conky-widgets'
+X-GNOME-Autostart-enabled=true
+NoDisplay=true
+Hidden=false
+StartupNotify=false
+Terminal=false
+Categories=Utility;

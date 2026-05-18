@@ -1,0 +1,78 @@
+# Nothing OS — lazygit (strict mono)
+
+gui:
+  theme:
+    activeBorderColor:
+      - "#ffffff"
+      - bold
+    inactiveBorderColor:
+      - "#1a1a1a"
+    optionsTextColor:
+      - "#6e6e6e"
+    selectedLineBgColor:
+      - "#1a1a1a"
+    selectedRangeBgColor:
+      - "#1a1a1a"
+    cherryPickedCommitBgColor:
+      - "#1a1a1a"
+    cherryPickedCommitFgColor:
+      - "#ffffff"
+    unstagedChangesColor:
+      - "#d72631"
+    defaultFgColor:
+      - "#ffffff"
+    searchingActiveBorderColor:
+      - "#ffffff"
+  authorColors:
+    "*": "#a8a8a8"
+  branchColors:
+    "main": "#ffffff"
+    "master": "#ffffff"
+  showBottomLine: true
+  showCommandLog: false
+  showRandomTip: false
+  showIcons: false
+  nerdFontsVersion: "3"
+  showFileTree: true
+  showListFooter: true
+  expandFocusedSidePanel: false
+  scrollHeight: 2
+  scrollPastBottom: true
+  sidePanelWidth: 0.3333
+  expandedSidePanelWeight: 2
+  mainPanelSplitMode: flexible
+  language: auto
+  timeFormat: "2006-01-02 15:04"
+  shortTimeFormat: "15:04"
+  border: single
+  animateExplosion: false
+  portraitMode: auto
+  filterMode: substring
+
+git:
+  paging:
+    colorArg: always
+    pager: delta --paging=never
+  commit:
+    signOff: false
+  merging:
+    manualCommit: false
+    args: ""
+  log:
+    order: topo-order
+    showGraph: always
+    showWholeGraph: false
+  skipHookPrefix: WIP
+  autoFetch: true
+  autoRefresh: true
+  fetchAll: true
+  branchLogCmd: "git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=medium {{branchName}} --"
+  allBranchesLogCmd: "git log --graph --all --color=always --abbrev-commit --decorate --date=relative --pretty=medium"
+  overrideGpg: false
+  disableForcePushing: false
+
+confirmOnQuit: false
+quitOnTopLevelReturn: false
+disableStartupPopups: true
+notARepository: prompt
+promptToReturnFromSubprocess: true

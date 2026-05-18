@@ -1,0 +1,45 @@
+# Nothing OS — aichat (Claude API)
+# Set ANTHROPIC_API_KEY in your shell env (e.g. ~/.zshrc or systemd user env)
+# before launching aichat.
+
+model: claude:claude-opus-4-7
+temperature: null
+top_p: null
+
+save: true
+save_session: null
+compress_threshold: 4000
+
+highlight: true
+light_theme: false
+wrap: auto
+wrap_code: true
+
+keybindings: vi
+editor: nvim
+serve_addr: 127.0.0.1:8000
+
+clients:
+  - type: claude
+    name: claude
+    api_base: https://api.anthropic.com/v1
+    api_key: ${ANTHROPIC_API_KEY}
+    models:
+      - name: claude-opus-4-7
+        max_input_tokens: 200000
+        max_output_tokens: 64000
+        require_max_tokens: true
+        supports_vision: true
+        supports_function_calling: true
+      - name: claude-sonnet-4-6
+        max_input_tokens: 200000
+        max_output_tokens: 64000
+        require_max_tokens: true
+        supports_vision: true
+        supports_function_calling: true
+      - name: claude-haiku-4-5-20251001
+        max_input_tokens: 200000
+        max_output_tokens: 32000
+        require_max_tokens: true
+        supports_vision: true
+        supports_function_calling: true

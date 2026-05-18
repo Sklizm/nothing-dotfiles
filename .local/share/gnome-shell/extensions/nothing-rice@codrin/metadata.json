@@ -1,0 +1,8 @@
+{
+  "uuid": "nothing-rice@codrin",
+  "name": "Nothing Rice",
+  "description": "Strict-mono Nothing OS CSS for shell + glyph-style notification LED flasher + idle Ndot overlay.",
+  "shell-version": ["48", "49", "50"],
+  "url": "local",
+  "settings-schema": "org.gnome.shell.extensions.nothing-rice"
+}

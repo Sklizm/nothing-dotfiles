@@ -1,0 +1,65 @@
+# Nothing OS — strict mono Alacritty
+# Backup: ~/.rice-backup/latest/configs/alacritty/alacritty.toml
+
+[font]
+normal = { family = "JetBrainsMono Nerd Font", style = "Light" }
+bold   = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+italic = { family = "JetBrainsMono Nerd Font", style = "Light Italic" }
+size = 13.0
+
+[window]
+opacity = 1.0
+decorations = "None"
+padding = { x = 14, y = 14 }
+dynamic_padding = false
+
+[cursor]
+style = { shape = "Beam", blinking = "On" }
+unfocused_hollow = true
+
+[selection]
+save_to_clipboard = true
+
+[colors.primary]
+background = "#000000"
+foreground = "#ffffff"
+dim_foreground = "#6e6e6e"
+bright_foreground = "#ffffff"
+
+[colors.cursor]
+text   = "#000000"
+cursor = "#ffffff"
+
+[colors.selection]
+text       = "#000000"
+background = "#ffffff"
+
+[colors.normal]
+black   = "#000000"
+red     = "#d72631"  # reserved for stderr / error output
+green   = "#6e6e6e"
+yellow  = "#a8a8a8"
+blue    = "#6e6e6e"
+magenta = "#a8a8a8"
+cyan    = "#a8a8a8"
+white   = "#ffffff"
+
+[colors.bright]
+black   = "#3a3a3a"
+red     = "#ff4d57"
+green   = "#a8a8a8"
+yellow  = "#d0d0d0"
+blue    = "#a8a8a8"
+magenta = "#d0d0d0"
+cyan    = "#d0d0d0"
+white   = "#ffffff"
+
+[colors.dim]
+black   = "#000000"
+red     = "#7a1a1d"
+green   = "#3a3a3a"
+yellow  = "#6e6e6e"
+blue    = "#3a3a3a"
+magenta = "#6e6e6e"
+cyan    = "#6e6e6e"
+white   = "#a8a8a8"
