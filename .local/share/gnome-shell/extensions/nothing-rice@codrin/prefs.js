@@ -19,9 +19,11 @@ export default class NothingRicePrefs extends ExtensionPreferences {
             group.add(row);
         };
 
-        addToggle('enable-css',          'Nothing CSS overlay',      'Restyle notifications, popovers, quick settings.');
-        addToggle('enable-glyph-led',    'Glyph LED notifications',  'Pulse a row of dots along the bottom edge on each notification.');
-        addToggle('enable-idle-overlay', 'Idle Ndot overlay',        'Show a fullscreen mono overlay after the configured idle timeout.');
+        addToggle('enable-css',           'Nothing CSS overlay',      'Restyle notifications, popovers, quick settings.');
+        addToggle('enable-glyph-led',     'Glyph LED notifications',  'Pulse a row of dots along the bottom edge on each notification, per-app patterns + unread badge.');
+        addToggle('enable-idle-overlay',  'Idle Ndot overlay',        'Show a fullscreen mono overlay after the configured idle timeout — with weather + now-playing.');
+        addToggle('enable-top-bar-clock', 'Top-bar Ndot clock',       'Replace GNOME’s default top-bar clock with an Ndot 57 live clock.');
+        addToggle('enable-dashboard',     'Dashboard overlay',        'Toggle a fullscreen Ndot dashboard with weather, clock and MPRIS player. Hotkey: Super+D.');
 
         // Idle timeout (seconds via spin)
         const tuneGroup = new Adw.PreferencesGroup({ title: 'Tuning' });

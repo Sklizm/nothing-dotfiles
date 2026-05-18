@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Kitty (Quake)
+Comment=Nothing-themed transparent kitty drop-down with tmux preload
+Exec=kitty --config %h/.config/kitty/quake.conf --session %h/.config/kitty/quake.session --class kitty-quake --title kitty-quake
+Icon=kitty
+Categories=System;TerminalEmulator;
+Terminal=false
+NoDisplay=true
+StartupWMClass=kitty-quake

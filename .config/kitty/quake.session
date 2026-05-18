@@ -1,0 +1,3 @@
+# Nothing OS — kitty quake session: drop into a persistent tmux session.
+new_tab quake
+launch tmux new-session -A -s quake

@@ -33,5 +33,20 @@
       <summary>Glyph LED dot count</summary>
     </key>
 
+    <key name="enable-top-bar-clock" type="b">
+      <default>true</default>
+      <summary>Replace top-bar clock with Ndot 57 clock</summary>
+    </key>
+
+    <key name="enable-dashboard" type="b">
+      <default>true</default>
+      <summary>Enable dashboard overlay (super+d)</summary>
+    </key>
+
+    <key name="dashboard-hotkey" type="as">
+      <default><![CDATA[['<Super>d']]]></default>
+      <summary>Hotkey to toggle the dashboard overlay</summary>
+    </key>
+
   </schema>
 </schemalist>

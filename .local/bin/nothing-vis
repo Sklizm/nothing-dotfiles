@@ -1,0 +1,162 @@
+#!/usr/bin/env python3
+"""Nothing OS — MPRIS waveform daemon.
+
+Captures the default sink monitor via parec, computes a 16-band FFT magnitude
+spectrum on 512-sample chunks at 22050 Hz, smooths it, and writes a single line
+of 16 unicode block characters to /tmp/nothing-vis-bars every ~50 ms.
+
+Conky reads that file via execpi.
+
+Pure stdlib (no numpy/pip) — uses a tiny iterative Cooley-Tukey FFT.
+"""
+
+import os, sys, math, signal, struct, subprocess, cmath, time
+
+SR        = 22050
+CHANNELS  = 1
+CHUNK     = 512
+BANDS     = 16
+OUT_PATH  = "/tmp/nothing-vis-bars"
+BLOCKS    = " ▁▂▃▄▅▆▇█"   # 9 levels
+SMOOTH    = 0.55
+SCALE     = 0.018
+SILENCE   = 1.6e-3        # below this RMS, render empty bar
+WRITE_MS  = 50
+
+# logarithmic frequency bin edges from 60Hz → SR/2
+def band_edges(n_bands, sr, n_fft):
+    f_lo, f_hi = 60.0, sr / 2 - 60
+    edges = []
+    for i in range(n_bands + 1):
+        f = f_lo * (f_hi / f_lo) ** (i / n_bands)
+        edges.append(min(n_fft // 2, max(1, int(round(f * n_fft / sr)))))
+    # ensure strictly increasing
+    for i in range(1, len(edges)):
+        if edges[i] <= edges[i - 1]:
+            edges[i] = edges[i - 1] + 1
+    return edges
+
+# iterative in-place FFT
+def fft(a):
+    n = len(a)
+    j = 0
+    for i in range(1, n):
+        bit = n >> 1
+        while j & bit:
+            j ^= bit
+            bit >>= 1
+        j ^= bit
+        if i < j:
+            a[i], a[j] = a[j], a[i]
+    length = 2
+    while length <= n:
+        ang = -2j * math.pi / length
+        wlen = cmath.exp(ang)
+        for i in range(0, n, length):
+            w = 1+0j
+            half = length // 2
+            for k in range(half):
+                u = a[i + k]
+                v = a[i + k + half] * w
+                a[i + k]        = u + v
+                a[i + k + half] = u - v
+                w *= wlen
+        length <<= 1
+    return a
+
+def hann(n):
+    return [0.5 * (1 - math.cos(2 * math.pi * i / (n - 1))) for i in range(n)]
+
+def render(bars):
+    out = []
+    for v in bars:
+        # v is roughly 0..1 after smoothing, clamp
+        v = max(0.0, min(1.0, v))
+        idx = int(round(v * (len(BLOCKS) - 1)))
+        out.append(BLOCKS[idx])
+    return "".join(out)
+
+def main():
+    edges  = band_edges(BANDS, SR, CHUNK)
+    win    = hann(CHUNK)
+    smooth = [0.0] * BANDS
+
+    cmd = [
+        "parec",
+        f"--rate={SR}",
+        f"--channels={CHANNELS}",
+        "--format=s16le",
+        "--latency-msec=20",
+        "--client-name=nothing-vis",
+    ]
+    # Stream from the default sink's monitor
+    try:
+        default_sink = subprocess.check_output(
+            ["pactl", "get-default-sink"], text=True
+        ).strip()
+        cmd.append(f"--device={default_sink}.monitor")
+    except Exception:
+        pass
+
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+
+    def cleanup(*_):
+        try: proc.terminate()
+        except Exception: pass
+        try: os.remove(OUT_PATH)
+        except FileNotFoundError: pass
+        sys.exit(0)
+    signal.signal(signal.SIGTERM, cleanup)
+    signal.signal(signal.SIGINT,  cleanup)
+
+    bytes_per_chunk = CHUNK * CHANNELS * 2
+    last_write = 0.0
+
+    while True:
+        raw = proc.stdout.read(bytes_per_chunk)
+        if not raw or len(raw) < bytes_per_chunk:
+            cleanup()
+
+        samples = struct.unpack(f"<{CHUNK * CHANNELS}h", raw)
+        # mono mix if stereo (CHANNELS=1 already, but harmless)
+        if CHANNELS > 1:
+            mono = [sum(samples[i:i+CHANNELS]) / CHANNELS for i in range(0, len(samples), CHANNELS)]
+        else:
+            mono = list(samples)
+
+        # RMS gate for silence
+        sumsq = 0.0
+        for s in mono: sumsq += s * s
+        rms = (sumsq / len(mono)) ** 0.5 / 32768.0
+        if rms < SILENCE:
+            # decay bars
+            for i in range(BANDS):
+                smooth[i] *= 0.55
+        else:
+            # window + FFT
+            buf = [complex(mono[i] / 32768.0 * win[i]) for i in range(CHUNK)]
+            fft(buf)
+            # magnitudes for first half
+            mags = [abs(c) for c in buf[:CHUNK // 2 + 1]]
+            for b in range(BANDS):
+                lo, hi = edges[b], edges[b + 1]
+                if hi <= lo: hi = lo + 1
+                # mean energy in band
+                m = sum(mags[lo:hi]) / max(1, (hi - lo))
+                # log scale + normalize
+                v = math.log1p(m * 30.0) * SCALE * (1.0 + b * 0.25)  # tilt highs up a bit
+                v = min(1.0, v)
+                smooth[b] = smooth[b] * SMOOTH + v * (1 - SMOOTH)
+
+        now = time.monotonic() * 1000
+        if now - last_write >= WRITE_MS:
+            line = render(smooth)
+            try:
+                with open(OUT_PATH + ".tmp", "w") as f: f.write(line + "\n")
+                os.replace(OUT_PATH + ".tmp", OUT_PATH)
+            except Exception:
+                pass
+            last_write = now
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,107 @@
+# Nothing OS — dunstrc (strict mono)
+# Black bg, white fg, hairline borders, no rounded corners, no chromatic accents.
+# Red reserved for critical urgency only.
+
+[global]
+    monitor = 0
+    follow  = mouse
+
+    width  = (320, 480)
+    height = (0, 200)
+    origin = top-right
+    offset = (24, 48)
+
+    scale = 0
+    notification_limit = 6
+
+    progress_bar = true
+    progress_bar_height = 6
+    progress_bar_frame_width = 0
+    progress_bar_min_width = 200
+    progress_bar_max_width = 460
+    progress_bar_corner_radius = 0
+
+    indicate_hidden = yes
+    transparency = 0
+    text_icon_padding = 0
+    frame_width = 1
+    frame_color = "#1a1a1a"
+    gap_size = 6
+    separator_color = "#1a1a1a"
+    sort = yes
+    idle_threshold = 0
+
+    font = Inter 11
+    line_height = 0
+    markup = full
+    format = "<b>%a</b>\n%s\n<small>%b</small>"
+    alignment = left
+    vertical_alignment = center
+    show_age_threshold = 60
+    ellipsize = end
+    ignore_newline = no
+    stack_duplicates = true
+    hide_duplicate_count = false
+    show_indicators = no
+
+    enable_recursive_icon_lookup = true
+    icon_theme = "Tela-black-dark"
+    icon_position = left
+    min_icon_size = 0
+    max_icon_size = 32
+
+    sticky_history = yes
+    history_length = 50
+    dmenu = /usr/bin/dmenu -p dunst:
+    browser = /usr/bin/xdg-open
+    always_run_script = true
+    title = Dunst
+    class = Dunst
+    corner_radius = 0
+    ignore_dbusclose = false
+
+    force_xwayland = false
+    force_xinerama = false
+
+    mouse_left_click  = close_current
+    mouse_middle_click = do_action, close_current
+    mouse_right_click = close_all
+
+[experimental]
+    per_monitor_dpi = false
+
+[urgency_low]
+    background = "#0a0a0a"
+    foreground = "#6e6e6e"
+    frame_color = "#1a1a1a"
+    timeout = 6
+    default_icon = ""
+
+[urgency_normal]
+    background = "#0a0a0a"
+    foreground = "#ffffff"
+    frame_color = "#1a1a1a"
+    timeout = 8
+    default_icon = ""
+
+[urgency_critical]
+    background = "#000000"
+    foreground = "#ffffff"
+    frame_color = "#d72631"
+    timeout = 0
+    default_icon = ""
+
+# Per-app shaping (no colors — just timeouts + format tweaks)
+[Discord]
+    appname = (Discord|Vesktop)
+    timeout = 5
+    format = "<b>%a</b> · %s\n<small>%b</small>"
+
+[Spotify]
+    appname = Spotify
+    timeout = 4
+
+[volume]
+    appname = (volume|playerctl|nothing-rice|caffeine)
+    timeout = 2
+    format = "<b>%a</b>  %s"

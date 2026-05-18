@@ -144,6 +144,120 @@
   width: 6px; height: 6px;
 }
 
+/* Dashboard overlay */
+.nothing-dashboard {
+  background-color: rgba(0, 0, 0, 0.92);
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1.4px);
+  background-size: 24px 24px;
+  background-position: 0 0;
+}
+.nothing-dashboard-panel {
+  background-color: transparent;
+  spacing: 22px;
+  padding: 48px 64px;
+  min-width: 700px;
+}
+.nothing-dashboard-toprow {
+  spacing: 18px;
+}
+.nothing-dashboard-meta {
+  color: #a8a8a8;
+  font-family: "Inter", sans-serif;
+  font-size: 11pt;
+  letter-spacing: 0.15em;
+  text-transform: lowercase;
+}
+.nothing-dashboard-sep {
+  color: #4a4a4a;
+  font-size: 11pt;
+  padding: 0 4px;
+}
+.nothing-dashboard-clock {
+  color: #ffffff;
+  font-family: "Ndot 57", "Inter", monospace;
+  font-size: 200pt;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+}
+.nothing-dashboard-date {
+  color: #6e6e6e;
+  font-family: "Inter", sans-serif;
+  font-size: 13pt;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin-top: -16px;
+}
+.nothing-dashboard-player {
+  spacing: 8px;
+  margin-top: 24px;
+}
+.nothing-dashboard-track {
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+  font-size: 16pt;
+  font-weight: 500;
+}
+.nothing-dashboard-artist {
+  color: #6e6e6e;
+  font-family: "Inter", sans-serif;
+  font-size: 12pt;
+  letter-spacing: 0.1em;
+}
+.nothing-dashboard-controls {
+  spacing: 16px;
+  margin-top: 12px;
+}
+.nothing-dashboard-btn {
+  background-color: #0a0a0a;
+  color: #ffffff;
+  border: 1px solid #1a1a1a;
+  border-radius: 0;
+  padding: 6px 18px;
+  font-family: "Inter", monospace;
+  font-size: 13pt;
+  transition-duration: 80ms;
+}
+.nothing-dashboard-btn:hover {
+  background-color: #1a1a1a;
+  border-color: #ffffff;
+}
+.nothing-dashboard-btn:active {
+  background-color: #ffffff;
+  color: #000000;
+}
+.nothing-dashboard-hint {
+  color: #4a4a4a;
+  font-family: "Inter", sans-serif;
+  font-size: 10pt;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-top: 24px;
+}
+
+/* Top-bar Ndot clock */
+.nothing-panel-clock {
+  font-family: "Ndot 57", "Inter", monospace;
+  font-size: 14pt;
+  font-weight: 400;
+  color: #ffffff;
+  padding: 0 12px;
+  letter-spacing: 0.04em;
+}
+
+/* Glyph LED unread badge */
+.nothing-glyph-badge {
+  background-color: #ffffff;
+  color: #000000;
+  font-family: "Ndot 57", "Inter", monospace;
+  font-size: 11pt;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 0;
+  text-align: center;
+  min-width: 18px;
+}
+
 /* Idle overlay */
 .nothing-idle-overlay {
   background-color: rgba(0, 0, 0, 0.92);
@@ -161,4 +275,19 @@
   font-size: 14pt;
   letter-spacing: 0.3em;
   text-transform: uppercase;
+}
+.nothing-idle-weather {
+  color: #a8a8a8;
+  font-family: "Inter", sans-serif;
+  font-size: 16pt;
+  letter-spacing: 0.15em;
+  text-transform: lowercase;
+  margin-bottom: 24px;
+}
+.nothing-idle-nowplaying {
+  color: #6e6e6e;
+  font-family: "Inter", sans-serif;
+  font-size: 13pt;
+  letter-spacing: 0.1em;
+  margin-top: 24px;
 }

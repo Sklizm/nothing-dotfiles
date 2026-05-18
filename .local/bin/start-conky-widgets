@@ -8,7 +8,16 @@ WIDGETS=(clock-widget stats-widget nowplaying-widget)
 
 # Kill any existing conky instances we own
 pkill -u "$USER" -x conky 2>/dev/null || true
+pkill -u "$USER" -f "nothing-vis" 2>/dev/null || true
 sleep 0.4
+
+# Start the MPRIS waveform daemon (feeds nowplaying widget)
+if command -v nothing-vis >/dev/null 2>&1; then
+    nohup nothing-vis >/dev/null 2>&1 &
+    disown 2>/dev/null || true
+    echo "  started nothing-vis (waveform daemon)"
+fi
+sleep 0.2
 
 for w in "${WIDGETS[@]}"; do
     cfg="$CONF_DIR/$w.conf"
